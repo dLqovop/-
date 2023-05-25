@@ -22,4 +22,8 @@ public class fragment_2 extends Fragment {
         view = inflater.inflate(R.layout.fragment_frag2, container, false);
         return view;
     }
+
+
+
+
 }
