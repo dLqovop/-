@@ -2,6 +2,7 @@ package com.example.jeju_makcha;
 
 import android.content.res.AssetManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class fragment_1 extends Fragment {
+
+    private Handler handler;
+    private Runnable runnable;
+
     private View view;
     private String TAG = "페이지 1";
 
@@ -38,7 +43,21 @@ public class fragment_1 extends Fragment {
 
     public void onActivityCreated(Bundle saveInstanceState) {
         super.onActivityCreated(saveInstanceState);
-        doGetRemainingTime();
+        handler = new Handler();
+        updateCurrentTime();
+    }
+
+    private void updateCurrentTime() {
+        handler.postDelayed(runnable = new Runnable() {
+            @Override
+            public void run() {
+                // 현재 시간 가져오기
+                doGetRemainingTime();
+
+                // 일정한 간격으로 업데이트 실행
+                handler.postDelayed(this, 1000); // 1초마다 업데이트
+            }
+        }, 0); // 처음에는 즉시 업데이트 시작
     }
     private void doGetRemainingTime() {
 
