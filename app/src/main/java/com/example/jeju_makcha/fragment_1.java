@@ -47,6 +47,12 @@ public class fragment_1 extends Fragment {
         updateCurrentTime();
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        handler.removeCallbacks(runnable);
+    }
+
     private void updateCurrentTime() {
         handler.postDelayed(runnable = new Runnable() {
             @Override

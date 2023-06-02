@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         //프래그먼트 생성
         fragment_frag1 = new fragment_1();
         fragment_frag2 = new fragment_2();
@@ -53,9 +52,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
         //리스너 등록
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        bottomNavigationView.setOnItemSelectedListener(item -> {
                 Log.i(TAG,"바텀네비게이션 클릭");
                 int itemId = item.getItemId();//item을 클릭시 id값을 가져와 FrameLayout에 fragment.xml띄우기
                 if (itemId == R.id.page_1) {
@@ -71,8 +68,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
                     return true;
                 }
                 return true;
-            }
-        });
+            });
     }
 
 
