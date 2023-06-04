@@ -1,5 +1,6 @@
 package com.example.jeju_makcha;
 
+
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -7,10 +8,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,6 +22,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class fragment_1 extends Fragment {
 
@@ -27,9 +33,9 @@ public class fragment_1 extends Fragment {
     private View view;
     private String TAG = "페이지 1";
 
-    // TextView 식별자 배열
-    int[] textViewIds = {R.id.text1, R.id.text2, R.id.text3, R.id.text4, R.id.text5, R.id.text6, R.id.text7, R.id.text8, R.id.text9, R.id.text10,
-            R.id.text11, R.id.text12, R.id.text13, R.id.text14, R.id.text15, R.id.text16, R.id.text17, R.id.text18, R.id.text19, R.id.text20,};
+    private RecyclerView recyclerView;
+    private BusAdapter busAdapter;
+    ArrayList<String> itemList;
 
     @Nullable
     @Override
@@ -38,14 +44,29 @@ public class fragment_1 extends Fragment {
         // Inflate the layout for this fragment
         Log.i(TAG,"페이지1 OnCreateView");
         view = inflater.inflate(R.layout.fragment_frag1, container, false);
+        recyclerView = view.findViewById(R.id.recyclerView);
         return view;
     }
 
-    public void onActivityCreated(Bundle saveInstanceState) {
-        super.onActivityCreated(saveInstanceState);
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         handler = new Handler();
-        updateCurrentTime();
+        itemList = new ArrayList<String>() ; //초기화 1
+        busAdapter = new BusAdapter(itemList);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(busAdapter);
+
+        if (view != null) {
+            updateCurrentTime();
+        } else {
+            // view가 null인 경우 예외 처리
+        }
     }
+
 
     @Override
     public void onDestroyView() {
@@ -73,31 +94,55 @@ public class fragment_1 extends Fragment {
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
             String line;
-            int index = 0;
+            itemList.clear(); // itemList 초기화 2
+
             while ((line = reader.readLine()) != null) {
+
                 String[] tokens = line.split("\t");
                 if (tokens.length >= 3 && tokens[2].equals("휴일")) {
                     continue;
                 }else {
                     String time = tokens[1]; // 인덱스 1번의 시간 데이터
                     String remainingTime = getRemainingTime(time); // 현재 시간과의 차이 계산
-                    String result = tokens[0] + ": " + remainingTime;
+//                    String result = tokens[0] + ": " + remainingTime;
+                    String result = tokens[0] + "번\n" + time + " 출발\n" + remainingTime;
 
+                    // 세 줄씩 묶어서 하나의 카드로 출력
+                    itemList.add(result);
+                    if (itemList.size() % 3 == 0) {
+                        busAdapter.notifyItemInserted(itemList.size() - 1);
+                    }
+                }
 
-                    final int currentIndex = index;
+                    //final int currentIndex = index;
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Log.d("Remaining Time", String.valueOf(result));
+//                            Log.d("Remaining Time", String.valueOf(result));
+                            Collections.sort(itemList, new Comparator<String>() {
+                                @Override
+                                public int compare(String s1, String s2) {
+                                    String[] tokens1 = s1.split(" 출발\\n");
+                                    String[] tokens2 = s2.split(" 출발\\n");
+                                    String time1 = tokens1[1];
+                                    String time2 = tokens2[1];
 
-                            TextView textView = getView().findViewById(textViewIds[currentIndex]);
-                            textView.setText(result);
+
+                                    return time1.compareTo(time2);
+                                }
+                            });
+
+                            StringBuilder sb = new StringBuilder();
+                            for (String item : itemList) {
+                                sb.append(item).append("\n");
+                            }
+
                         }
                     });
-                    index++;
                 }
-            }
+//            }
             reader.close();
+            busAdapter.notifyDataSetChanged();
         } catch (IOException e) {
             e.printStackTrace(); // 예외 처리
         }
@@ -131,9 +176,8 @@ public class fragment_1 extends Fragment {
 
 //        return remainingHour * 60 + remainingMinute;
 
-        String remainingTime = String.format("%02d:%02d", remainingHour, remainingMinute);
+        String remainingTime = String.format("%02d시 %02d분 뒤에 출발", remainingHour, remainingMinute);
 
         return remainingTime;
-
     }
 }
