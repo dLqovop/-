@@ -1,13 +1,16 @@
 package com.example.jeju_makcha;
 
 
+import android.content.Intent;
 import android.content.res.AssetManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 public class fragment_1 extends Fragment {
 
@@ -32,10 +36,21 @@ public class fragment_1 extends Fragment {
 
     private View view;
     private String TAG = "페이지 1";
+    private Button favoriteButton;
 
     private RecyclerView recyclerView;
     private BusAdapter busAdapter;
     ArrayList<String> itemList;
+
+    public void setBusAdapter(BusAdapter adapter) {
+        busAdapter = adapter;
+    }
+    public List<String> getItemList() {
+        if (busAdapter != null) {
+            return busAdapter.getItemList();
+        }
+        return new ArrayList<>();
+    }
 
     @Nullable
     @Override
@@ -45,7 +60,28 @@ public class fragment_1 extends Fragment {
         Log.i(TAG,"페이지1 OnCreateView");
         view = inflater.inflate(R.layout.fragment_frag1, container, false);
         recyclerView = view.findViewById(R.id.recyclerView);
+
+        favoriteButton = view.findViewById(R.id.favorite);
+        favoriteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*
+                DBHelper dbHelper = new DBHelper(requireContext());
+                SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+                List<String> favorites = dbHelper.getAllFavorites();
+                for (String item : favorites) {
+                    Log.i("DB", "Favorite item: " + item);
+                }*/
+                Intent intent = new Intent(requireContext(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
         return view;
+
+
+
     }
 
 
@@ -65,6 +101,8 @@ public class fragment_1 extends Fragment {
         } else {
             // view가 null인 경우 예외 처리
         }
+
+
     }
 
 
@@ -143,6 +181,19 @@ public class fragment_1 extends Fragment {
 //            }
             reader.close();
             busAdapter.notifyDataSetChanged();
+
+
+            busAdapter.setOnItemClickListener(new BusAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    String selectedItem = busAdapter.getItemList().get(position);
+                    DBHelper dbHelper = new DBHelper(requireContext());
+                    dbHelper.insertFavorite(selectedItem);
+//                    Log.i("click", "Inserted favorite item: " + selectedItem);
+                }
+            });
+
+
         } catch (IOException e) {
             e.printStackTrace(); // 예외 처리
         }

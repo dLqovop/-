@@ -19,6 +19,9 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {  // implements RecyclerViewAdapterCallback
 
     //바텀 네비게이션
@@ -26,14 +29,25 @@ public class MainActivity extends AppCompatActivity {  // implements RecyclerVie
     private String TAG = "메인페이지";
 
     //프래그먼트 변수
-    Fragment fragment_frag1;
+    fragment_1 fragment_frag1;
     Fragment fragment_frag2;
     Fragment fragment_frag3;
+
+    private DBHelper dbHelper;
+    private BusAdapter busAdapter;
+  /*
+    public void setBusAdapter(BusAdapter adapter) {
+        busAdapter = adapter;
+    }
+*/
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+//        dbHelper = new DBHelper(this);
 
         //프래그먼트 생성
         fragment_frag1 = new fragment_1();
@@ -42,6 +56,8 @@ public class MainActivity extends AppCompatActivity {  // implements RecyclerVie
 
         //바텀네비게이션
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
+
+//        fragment_frag1.setBusAdapter(busAdapter);
 
         //리스너 등록
         bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -61,5 +77,12 @@ public class MainActivity extends AppCompatActivity {  // implements RecyclerVie
                 }
                 return true;
             });
+        dbHelper = new DBHelper(this); // DBHelper 인스턴스 생성
+
+        // DB에 저장된 값 로그로 출력
+        List<String> favorites = dbHelper.getAllFavorites();
+        for (String item : favorites) {
+            Log.i("DBHelper", "Favorite MainActivity: " + item);
+        }
     }
 }

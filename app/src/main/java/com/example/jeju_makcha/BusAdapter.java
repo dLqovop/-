@@ -5,6 +5,7 @@ package com.example.jeju_makcha;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,9 +18,19 @@ import java.util.List;
 public class BusAdapter extends RecyclerView.Adapter<BusAdapter.ViewHolder> {
 
     private List<String> busDataList;
+    private OnItemClickListener onItemClickListener;
 
     public BusAdapter(List<String> busDataList) {
         this.busDataList = busDataList;
+    }
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+    }
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.onItemClickListener = listener;
+    }
+    public List<String> getItemList() {
+        return busDataList;
     }
 
     @NonNull
@@ -55,6 +66,18 @@ public class BusAdapter extends RecyclerView.Adapter<BusAdapter.ViewHolder> {
         viewHolder.line1TextView.setText(lines[0]);
         viewHolder.line2TextView.setText(lines[1]);
         viewHolder.line3TextView.setText(lines[2]);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onItemClickListener != null) {
+                    int adapterPosition = holder.getAdapterPosition();
+                    if (adapterPosition != RecyclerView.NO_POSITION) {
+                        onItemClickListener.onItemClick(v, adapterPosition);
+                    }
+                }
+            }
+        });
     }
 
     @Override
