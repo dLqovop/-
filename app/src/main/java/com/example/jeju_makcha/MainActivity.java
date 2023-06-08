@@ -3,6 +3,8 @@ package com.example.jeju_makcha;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -77,6 +79,13 @@ public class MainActivity extends AppCompatActivity {  // implements RecyclerVie
                 }
                 return true;
             });
+
+        // Frag1을 초기화면으로 설정
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.main_frame, new fragment_1());
+        fragmentTransaction.commit();
+
         dbHelper = new DBHelper(this); // DBHelper 인스턴스 생성
 
         // DB에 저장된 값 로그로 출력
