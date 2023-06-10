@@ -1,5 +1,6 @@
 package com.example.jeju_makcha;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Bundle;
@@ -28,6 +29,8 @@ import java.util.Comparator;
 import java.util.List;
 
 public class fragment_2 extends Fragment  {
+
+    private SQLiteDatabase database;
     private View view;
     private String TAG = "페이지 2";
 
@@ -123,5 +126,9 @@ public class fragment_2 extends Fragment  {
     public void onDestroyView() {
         super.onDestroyView();
         handler.removeCallbacks(runnable);
+        // 데이터베이스 연결 종료
+        if (database != null && database.isOpen()) {
+            database.close();
+        }
     }
 }
