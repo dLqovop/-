@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper {
-    private static final String DATABASE_NAME = "favorites_database.db";
+    private static final String DATABASE_NAME = "favorites.db";
     private static final int DATABASE_VERSION = 1;
     private static final String TABLE_NAME = "favorites";
     private static final String COLUMN_ID = "id";
@@ -40,7 +40,14 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public void insertFavorite(String item) {
         SQLiteDatabase db = getReadableDatabase();
-        db = getWritableDatabase();
+//        db = getWritableDatabase();
+
+        // 중복 체크
+        if (isFavoriteItemExists(item, db)) {
+            Log.i("DBHelper", "Favorite item already exists: " + item);
+            return;
+        }
+
         ContentValues values = new ContentValues();
         values.put(COLUMN_ITEM, item);
         long newRowId = db.insert(TABLE_NAME, null, values);
@@ -49,6 +56,20 @@ public class DBHelper extends SQLiteOpenHelper {
         } else {
             Log.i("DBHelper", "Inserted favorite item: " + item);
         }
+    }
+    private boolean isFavoriteItemExists(String item, SQLiteDatabase db) {
+        Cursor cursor = db.query(
+                TABLE_NAME, // 테이블 이름
+                new String[]{COLUMN_ITEM}, // 검색할 열
+                COLUMN_ITEM + "=?", // 조건
+                new String[]{item}, // 조건 값
+                null, null, null
+        );
+        boolean exists = cursor != null && cursor.getCount() > 0;
+        if (cursor != null) {
+            cursor.close();
+        }
+        return exists;
     }
 
     public List<String> getAllFavorites() {

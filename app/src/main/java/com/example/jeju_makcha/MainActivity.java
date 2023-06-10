@@ -3,6 +3,8 @@ package com.example.jeju_makcha;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,6 +17,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -35,11 +38,8 @@ public class MainActivity extends AppCompatActivity {  // implements RecyclerVie
 
     private DBHelper dbHelper;
     private BusAdapter busAdapter;
-  /*
-    public void setBusAdapter(BusAdapter adapter) {
-        busAdapter = adapter;
-    }
-*/
+
+    private RecyclerView recyclerView;
 
 
     @Override
@@ -47,24 +47,44 @@ public class MainActivity extends AppCompatActivity {  // implements RecyclerVie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        dbHelper = new DBHelper(this);
-
         //프래그먼트 생성
         fragment_frag1 = new fragment_1();
         fragment_frag2 = new fragment_2();
         fragment_frag3 = new fragment_3();
 
+
         //바텀네비게이션
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
-//        fragment_frag1.setBusAdapter(busAdapter);
+//        // RecyclerView 초기화
+//        recyclerView = findViewById(R.id.main_recycler);
+//        // 어댑터 생성
+//        List<String> itemList = new ArrayList<>();
+//        BusAdapter busAdapter = new BusAdapter(itemList);
+//
+//        // RecyclerView에 어댑터 설정
+//        recyclerView.setAdapter(busAdapter);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//
+//        DBHelper dbHelper = new DBHelper(this);
+//        List<String> favorites = dbHelper.getAllFavorites();
+
+// 어댑터에 DB 내용 설정
+//        busAdapter.setItemList(favorites);
+
+// 어댑터 갱신
+//        busAdapter.notifyDataSetChanged();
 
         //리스너 등록
         bottomNavigationView.setOnItemSelectedListener(item -> {
+            getSupportFragmentManager().beginTransaction()
+                    .remove(fragment_frag1)
+                    .commit();
                 Log.i(TAG,"바텀네비게이션 클릭");
                 int itemId = item.getItemId();//item을 클릭시 id값을 가져와 FrameLayout에 fragment.xml띄우기
                 if (itemId == R.id.page_1) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.main_frame,fragment_frag1).commitAllowingStateLoss();
+
                     return true;
                 }
                 else if (itemId == R.id.page_2) {
@@ -77,12 +97,12 @@ public class MainActivity extends AppCompatActivity {  // implements RecyclerVie
                 }
                 return true;
             });
-        dbHelper = new DBHelper(this); // DBHelper 인스턴스 생성
 
-        // DB에 저장된 값 로그로 출력
-        List<String> favorites = dbHelper.getAllFavorites();
-        for (String item : favorites) {
-            Log.i("DBHelper", "Favorite MainActivity: " + item);
-        }
+        // Frag1을 초기화면으로 설정
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.main_frame, new fragment_1());
+        fragmentTransaction.commit();
+
     }
 }

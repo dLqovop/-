@@ -12,17 +12,16 @@
         android:layout_height="634dp"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintStart_toStartOf="parent">
-
-        <ListView
-            android:id="@+id/favoritesListView"
+        <FrameLayout
+            android:id="@+id/fragmentContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:divider="@android:color/darker_gray"
-            android:dividerHeight="0.5dp"
-            android:padding="8dp" />
+            android:layout_height="match_parent" />
 
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/main_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </FrameLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

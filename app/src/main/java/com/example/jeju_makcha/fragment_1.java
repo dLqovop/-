@@ -65,14 +65,6 @@ public class fragment_1 extends Fragment {
         favoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
-                DBHelper dbHelper = new DBHelper(requireContext());
-                SQLiteDatabase db = dbHelper.getReadableDatabase();
-
-                List<String> favorites = dbHelper.getAllFavorites();
-                for (String item : favorites) {
-                    Log.i("DB", "Favorite item: " + item);
-                }*/
                 Intent intent = new Intent(requireContext(), MainActivity.class);
                 startActivity(intent);
             }
@@ -124,6 +116,64 @@ public class fragment_1 extends Fragment {
             }
         }, 0); // 처음에는 즉시 업데이트 시작
     }
+
+    private void doGetRemainingTime() {
+        AssetManager assetManager = getResources().getAssets();
+        try {
+            InputStream inputStream = assetManager.open("bus.txt");
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+            String line;
+            itemList.clear(); // itemList 초기화
+
+            while ((line = reader.readLine()) != null) {
+                String[] tokens = line.split("\t");
+                if (tokens.length >= 3 && tokens[2].equals("휴일")) {
+                    continue;
+                } else {
+                    String time = tokens[1]; // 인덱스 1번의 시간 데이터
+                    String remainingTime = TimeUtil.calculateRemainingTime(time); // 현재 시간과의 차이 계산
+                    String result = tokens[0] + "\n" + time + "\n" + remainingTime;
+
+                    // 세 줄씩 묶어서 하나의 카드로 출력
+                    itemList.add(result);
+                    if (itemList.size() % 3 == 0) {
+                        busAdapter.notifyItemInserted(itemList.size() - 1);
+                    }
+                }
+            }
+
+            reader.close();
+
+            // 남은 시간 기준으로 오름차순 정렬
+            Collections.sort(itemList, new Comparator<String>() {
+                @Override
+                public int compare(String s1, String s2) {
+                    String[] tokens1 = s1.split("\\n");
+                    String[] tokens2 = s2.split("\\n");
+                    String remainingTime1 = tokens1[2];
+                    String remainingTime2 = tokens2[2];
+                    return remainingTime1.compareTo(remainingTime2);
+                }
+            });
+
+            busAdapter.notifyDataSetChanged();
+
+            busAdapter.setOnItemClickListener(new BusAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    String selectedItem = busAdapter.getItemList().get(position);
+                    DBHelper dbHelper = new DBHelper(requireContext());
+                    dbHelper.insertFavorite(selectedItem);
+                }
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace(); // 예외 처리
+        }
+    }
+
+    /*
     private void doGetRemainingTime() {
 
         AssetManager assetManager = getResources().getAssets();
@@ -143,7 +193,7 @@ public class fragment_1 extends Fragment {
                     String time = tokens[1]; // 인덱스 1번의 시간 데이터
                     String remainingTime = getRemainingTime(time); // 현재 시간과의 차이 계산
 //                    String result = tokens[0] + ": " + remainingTime;
-                    String result = tokens[0] + "번\n" + time + " 출발\n" + remainingTime;
+                    String result = tokens[0] + "\n" + time + "\n" + remainingTime;
 
                     // 세 줄씩 묶어서 하나의 카드로 출력
                     itemList.add(result);
@@ -160,8 +210,8 @@ public class fragment_1 extends Fragment {
                             Collections.sort(itemList, new Comparator<String>() {
                                 @Override
                                 public int compare(String s1, String s2) {
-                                    String[] tokens1 = s1.split(" 출발\\n");
-                                    String[] tokens2 = s2.split(" 출발\\n");
+                                    String[] tokens1 = s1.split("\\n");
+                                    String[] tokens2 = s2.split("\\n");
                                     String time1 = tokens1[1];
                                     String time2 = tokens2[1];
 
@@ -198,6 +248,7 @@ public class fragment_1 extends Fragment {
             e.printStackTrace(); // 예외 처리
         }
     }
+    /*
     private String getRemainingTime(String time) {
         // 현재 시간 가져오기
         Calendar calendar = Calendar.getInstance();
@@ -231,4 +282,5 @@ public class fragment_1 extends Fragment {
 
         return remainingTime;
     }
+    */
 }

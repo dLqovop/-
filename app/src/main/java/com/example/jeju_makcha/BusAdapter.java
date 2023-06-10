@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -20,9 +21,13 @@ public class BusAdapter extends RecyclerView.Adapter<BusAdapter.ViewHolder> {
     private List<String> busDataList;
     private OnItemClickListener onItemClickListener;
 
+    private List<Integer> expandedItems;
+
     public BusAdapter(List<String> busDataList) {
         this.busDataList = busDataList;
+        this.expandedItems = new ArrayList<>();
     }
+
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
     }
@@ -31,6 +36,11 @@ public class BusAdapter extends RecyclerView.Adapter<BusAdapter.ViewHolder> {
     }
     public List<String> getItemList() {
         return busDataList;
+    }
+
+    public void setItemList(List<String> busDAtaList) {
+        this.busDataList = busDAtaList;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -52,9 +62,13 @@ public class BusAdapter extends RecyclerView.Adapter<BusAdapter.ViewHolder> {
         public TextView line2TextView;
         public TextView line3TextView;
 
+        private TextView textViewItem;
+
         public ViewHolder(View itemView) {
             super(itemView);
+            //textViewItem = itemView.findViewById(R.id.line1TextView);
         }
+
     }
 
     @Override
@@ -66,6 +80,7 @@ public class BusAdapter extends RecyclerView.Adapter<BusAdapter.ViewHolder> {
         viewHolder.line1TextView.setText(lines[0]);
         viewHolder.line2TextView.setText(lines[1]);
         viewHolder.line3TextView.setText(lines[2]);
+
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,8 +97,12 @@ public class BusAdapter extends RecyclerView.Adapter<BusAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
+        if (busDataList == null) {
+            return 0; // 데이터가 없는 경우에는 항목 개수를 0으로 반환
+        }
         return busDataList.size();
     }
+
 
 
 
