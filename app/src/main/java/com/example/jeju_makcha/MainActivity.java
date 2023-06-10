@@ -56,25 +56,6 @@ public class MainActivity extends AppCompatActivity {  // implements RecyclerVie
         //바텀네비게이션
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
-//        // RecyclerView 초기화
-//        recyclerView = findViewById(R.id.main_recycler);
-//        // 어댑터 생성
-//        List<String> itemList = new ArrayList<>();
-//        BusAdapter busAdapter = new BusAdapter(itemList);
-//
-//        // RecyclerView에 어댑터 설정
-//        recyclerView.setAdapter(busAdapter);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-//
-//        DBHelper dbHelper = new DBHelper(this);
-//        List<String> favorites = dbHelper.getAllFavorites();
-
-// 어댑터에 DB 내용 설정
-//        busAdapter.setItemList(favorites);
-
-// 어댑터 갱신
-//        busAdapter.notifyDataSetChanged();
-
         //리스너 등록
         bottomNavigationView.setOnItemSelectedListener(item -> {
             getSupportFragmentManager().beginTransaction()
