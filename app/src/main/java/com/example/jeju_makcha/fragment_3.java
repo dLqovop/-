@@ -33,7 +33,7 @@ public class fragment_3 extends Fragment {
             if (!minutesString.isEmpty()) {
                 int minutes = Integer.parseInt(minutesString);
                 SQLiteDatabase db = dbHelper.getWritableDatabase(); // 또는 getReadableDatabase()
-                dbHelper.onCreate(db);
+                //dbHelper.onCreate(db);
                 dbHelper.insertUserSetting(minutes);
                 Toast.makeText(getActivity(), "설정이 저장되었습니다.", Toast.LENGTH_SHORT).show();
             } else {

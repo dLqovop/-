@@ -48,12 +48,26 @@ public class BusAdapter extends RecyclerView.Adapter<BusAdapter.ViewHolder> {
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // 카드 뷰를 생성합니다.
         View cardView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_bus, parent, false);
-
         // 각 줄에 대한 다른 스타일을 적용한 ViewHolder를 생성합니다.
         ViewHolder viewHolder = new ViewHolder(cardView);
-        viewHolder.line1TextView = cardView.findViewById(R.id.line1TextView);
-        viewHolder.line2TextView = cardView.findViewById(R.id.line2TextView);
-        viewHolder.line3TextView = cardView.findViewById(R.id.line3TextView);
+
+
+        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = viewHolder.getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    if (expandedItems.contains(position)) {
+                        // 아이템이 확장되어 있는 경우, 축소합니다.
+                        expandedItems.remove(Integer.valueOf(position));
+                    } else {
+                        // 아이템이 축소되어 있는 경우, 확장합니다.
+                        expandedItems.add(position);
+                    }
+                    notifyItemChanged(position);
+                }
+            }
+        });
 
         return viewHolder;
     }
@@ -61,12 +75,14 @@ public class BusAdapter extends RecyclerView.Adapter<BusAdapter.ViewHolder> {
         public TextView line1TextView;
         public TextView line2TextView;
         public TextView line3TextView;
-
-        private TextView textViewItem;
+        public View expandedView; // 확장될 추가 뷰
 
         public ViewHolder(View itemView) {
             super(itemView);
-            //textViewItem = itemView.findViewById(R.id.line1TextView);
+            line1TextView = itemView.findViewById(R.id.line1TextView);
+            line2TextView = itemView.findViewById(R.id.line2TextView);
+            line3TextView = itemView.findViewById(R.id.line3TextView);
+            expandedView = itemView.findViewById(R.id.expandedView); // 레이아웃에서 확장될 뷰를 할당합니다.
         }
 
     }
@@ -74,14 +90,19 @@ public class BusAdapter extends RecyclerView.Adapter<BusAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         String item = busDataList.get(position);
-
-        ViewHolder viewHolder = (ViewHolder) holder;
         String[] lines = item.split("\n");
-        viewHolder.line1TextView.setText(lines[0]);
-        viewHolder.line2TextView.setText(lines[1]);
-        viewHolder.line3TextView.setText(lines[2]);
 
+        holder.line1TextView.setText(lines[0]);
+        holder.line2TextView.setText(lines[1]);
+        holder.line3TextView.setText(lines[2]);
 
+        if (expandedItems.contains(position)) {
+            holder.expandedView.setVisibility(View.VISIBLE);
+        } else {
+            holder.expandedView.setVisibility(View.GONE);
+        }
+
+//클릭하면 DB 추가했던 코드
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,6 +114,7 @@ public class BusAdapter extends RecyclerView.Adapter<BusAdapter.ViewHolder> {
                 }
             }
         });
+
     }
 
     @Override
