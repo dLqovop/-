@@ -24,7 +24,7 @@ public class TimeUtil {
         // 버스 시간 파싱
         String[] tokens = time.split(":");
         int busHour = Integer.parseInt(tokens[0]);
-        int busMinute = Integer.parseInt(tokens[1].strip());
+        int busMinute = Integer.parseInt(tokens[1].replaceAll(" 출발", ""));
 
         // 남은 시간 계산
         int remainingHour = busHour - currentHour;
