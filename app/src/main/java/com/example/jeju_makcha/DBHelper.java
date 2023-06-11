@@ -38,16 +38,15 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(createUserSettingsTableQuery);
     }
 
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        String dropFavoritesTableQuery = "DROP TABLE IF EXISTS " + TABLE_NAME_FAVORITES;
-        db.execSQL(dropFavoritesTableQuery);
-
-        String dropUserSettingsTableQuery = "DROP TABLE IF EXISTS " + TABLE_NAME_USER_SETTINGS;
-        db.execSQL(dropUserSettingsTableQuery);
-
+        String dropTableQuery = "DROP TABLE IF EXISTS " + TABLE_NAME_FAVORITES;
+        db.execSQL(dropTableQuery);
         onCreate(db);
     }
+
+
 
     public void insertFavorite(String item) {
         SQLiteDatabase db = getWritableDatabase();

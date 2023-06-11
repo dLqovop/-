@@ -94,10 +94,17 @@ public class fragment_2 extends Fragment  {
         for (String item : dbDataList) {
             String[] tokens = item.split("\n"); // 데이터를 줄바꿈 문자("\n")로 분리
 
-            String time = tokens[1]; // DB에서 시간 추출하는 부분을 구현해야 함
-            String remainingTime = TimeUtil.calculateRemainingTime(time); // 현재 시간과의 차이 계산
-            String result = formatDataForDisplay(tokens[0], time, remainingTime); // 화면에 표시할 데이터 형식 지정
-            displayList.add(result);
+            if (tokens.length >= 2) {
+                String time = tokens[1]; // DB에서 시간 추출하는 부분을 구현해야 함
+                String remainingTime = TimeUtil.calculateRemainingTime(time); // 현재 시간과의 차이 계산
+                String result = formatDataForDisplay(tokens[0], time, remainingTime); // 화면에 표시할 데이터 형식 지정
+                displayList.add(result);
+            } else {
+                // 데이터가 올바른 형식이 아닐 경우에 대한 처리
+                // 예를 들어, tokens 배열의 길이가 2보다 작을 때
+                // 또는 DB에서 시간 추출에 실패했을 때 등
+                // 이 경우에는 원하는 동작을 수행하거나 에러 처리를 진행해야 합니다.
+            }
         }
 
 // 남은 시간 기준으로 오름차순 정렬
