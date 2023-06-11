@@ -227,7 +227,7 @@ public class fragment_1 extends Fragment {
 
 //        return remainingHour * 60 + remainingMinute;
 
-        String remainingTime = String.format("%02d시 %02d분 뒤에 출발", remainingHour, remainingMinute);
+        String remainingTime = String.format("%02d 시간 %02d 분 뒤", remainingHour, remainingMinute);
 
         return remainingTime;
     }

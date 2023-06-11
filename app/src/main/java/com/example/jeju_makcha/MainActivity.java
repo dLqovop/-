@@ -1,6 +1,7 @@
 package com.example.jeju_makcha;
 
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -16,6 +17,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {  // implements RecyclerViewAdapterCallback
 
@@ -49,6 +51,7 @@ public class MainActivity extends AppCompatActivity {  // implements RecyclerVie
         fragment_frag2 = new fragment_2();
         fragment_frag3 = new fragment_3();
 
+
         //바텀네비게이션
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
@@ -71,10 +74,13 @@ public class MainActivity extends AppCompatActivity {  // implements RecyclerVie
             return true;
         });
 
+
         // Frag1을 초기화면으로 설정
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.main_frame, new fragment_1());
         fragmentTransaction.commit();
+
+
     }
 }
