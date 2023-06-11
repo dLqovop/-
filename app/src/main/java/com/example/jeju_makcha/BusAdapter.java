@@ -2,6 +2,7 @@ package com.example.jeju_makcha;
 
 
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -108,6 +109,19 @@ public class BusAdapter extends RecyclerView.Adapter<BusAdapter.ViewHolder> {
             public void onClick(View v) {
                 if (onItemClickListener != null) {
                     int adapterPosition = holder.getAdapterPosition();
+
+                    //확장
+                    if (adapterPosition != RecyclerView.NO_POSITION) {
+                        if (expandedItems.contains(adapterPosition)) {
+                            // 아이템이 확장되어 있는 경우, 축소합니다.
+                            expandedItems.remove(Integer.valueOf(adapterPosition));
+                        } else {
+                            // 아이템이 축소되어 있는 경우, 확장합니다.
+                            expandedItems.add(adapterPosition);
+                        }
+                        notifyItemChanged(adapterPosition);
+                    }
+                    //
                     if (adapterPosition != RecyclerView.NO_POSITION) {
                         onItemClickListener.onItemClick(v, adapterPosition);
                     }

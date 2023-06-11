@@ -125,7 +125,7 @@ public class fragment_1 extends Fragment {
                 } else {
                     String time = tokens[1]; // 인덱스 1번의 시간 데이터
                     String remainingTime = TimeUtil.calculateRemainingTime(time); // 현재 시간과의 차이 계산
-                    String result = tokens[0] + "번\n" + time + " 출발\n" + remainingTime;
+                    String result = tokens[0] + "번\n" + time + "\n" + remainingTime;
 
                     // 세 줄씩 묶어서 하나의 카드로 출력
                     itemList.add(result);
