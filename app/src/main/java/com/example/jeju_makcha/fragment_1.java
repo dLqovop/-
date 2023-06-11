@@ -43,17 +43,6 @@ public class fragment_1 extends Fragment {
     private RecyclerView recyclerView;
     private BusAdapter busAdapter;
     ArrayList<String> itemList;
-
-    public void setBusAdapter(BusAdapter adapter) {
-        busAdapter = adapter;
-    }
-    public List<String> getItemList() {
-        if (busAdapter != null) {
-            return busAdapter.getItemList();
-        }
-        return new ArrayList<>();
-    }
-
     @Nullable
     @Override
     public View onCreateView(@Nullable LayoutInflater inflater, @Nullable ViewGroup container,
@@ -62,7 +51,7 @@ public class fragment_1 extends Fragment {
         Log.i(TAG,"페이지1 OnCreateView");
         view = inflater.inflate(R.layout.fragment_frag1, container, false);
         recyclerView = view.findViewById(R.id.recyclerView);
-
+/*
         favoriteButton = view.findViewById(R.id.favorite);
         favoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,13 +60,10 @@ public class fragment_1 extends Fragment {
                 startActivity(intent);
             }
         });
+ */
 
         return view;
-
-
-
     }
-
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -95,8 +81,6 @@ public class fragment_1 extends Fragment {
         } else {
             // view가 null인 경우 예외 처리
         }
-
-
     }
 
 
@@ -141,7 +125,7 @@ public class fragment_1 extends Fragment {
                 } else {
                     String time = tokens[1]; // 인덱스 1번의 시간 데이터
                     String remainingTime = TimeUtil.calculateRemainingTime(time); // 현재 시간과의 차이 계산
-                    String result = tokens[0] + "\n" + time + "\n" + remainingTime;
+                    String result = tokens[0] + "번\n" + time + " 출발\n" + remainingTime;
 
                     // 세 줄씩 묶어서 하나의 카드로 출력
                     itemList.add(result);
