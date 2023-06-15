@@ -8,6 +8,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
+
+import androidx.core.app.NotificationManagerCompat;
 
 public class AlarmReceiver extends BroadcastReceiver {
 
@@ -34,7 +37,8 @@ public class AlarmReceiver extends BroadcastReceiver {
         // 알림 클릭 시 실행될 액티비티 지정
         Intent intent = new Intent(context, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
 
         // 알림 생성
         Notification.Builder builder = new Notification.Builder(context, CHANNEL_ID)
@@ -46,8 +50,13 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         // 알림 표시
         NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
-        if (notificationManager != null) {
+        if (NotificationManagerCompat.from(context).areNotificationsEnabled()) {
+            Log.d("시발","시발");
             notificationManager.notify(NOTIFICATION_ID, builder.build());
+        } else {
+            // 알림이 비활성화되어 있음
+            // 사용자에게 알림을 활성화하도록 안내할 수 있음
+            Log.d("시발","비활성화");
         }
     }
 }

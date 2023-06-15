@@ -19,7 +19,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 public class fragment_3 extends Fragment {
-    private static final int PERMISSION_REQUEST_CODE = 1;
     private EditText minutesEditText;
     private Button settingsButton;
     private DBHelper dbHelper;
@@ -36,7 +35,8 @@ public class fragment_3 extends Fragment {
         dbHelper = new DBHelper(getActivity());
         alarmManager = (AlarmManager) requireContext().getSystemService(Context.ALARM_SERVICE);
         Intent alarmReceiverIntent = new Intent(requireContext(), AlarmReceiver.class);
-        alarmIntent = PendingIntent.getBroadcast(requireContext(), 0, alarmReceiverIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmIntent = PendingIntent.getBroadcast(requireContext(), 0, alarmReceiverIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
 
         settingsButton.setOnClickListener(v -> {
             String minutesString = minutesEditText.getText().toString();
@@ -53,7 +53,7 @@ public class fragment_3 extends Fragment {
                 alarmManager.set(AlarmManager.RTC_WAKEUP, triggerTimeMillis, alarmIntent);
 
                 // 사용자 설정 저장
-                dbHelper.insertUserSetting(minutes);
+//                dbHelper.insertUserSetting(minutes);
 
                 Toast.makeText(getActivity(), "설정이 저장되었습니다.", Toast.LENGTH_SHORT).show();
             } else {
