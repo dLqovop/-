@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,48 +30,40 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class fragment_1 extends Fragment {
-
+public class fragment_1 extends Fragment implements BusRoute.OnApiResponseListener {
     private SQLiteDatabase database;
-
     private Handler handler;
     private Runnable runnable;
-
     private View view;
-    private String TAG = "페이지 1";
-    private Button favoriteButton;
-
+//    private String TAG = "페이지 1";
     private RecyclerView recyclerView;
     private BusAdapter busAdapter;
-    ArrayList<String> itemList;
+
+    private BusRoute busRoute;
+    private List<String> itemList = new ArrayList<>();
+
     @Nullable
     @Override
     public View onCreateView(@Nullable LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        Log.i(TAG,"페이지1 OnCreateView");
         view = inflater.inflate(R.layout.fragment_frag1, container, false);
+        // BusAdapter 객체 초기화
+        busAdapter = new BusAdapter(itemList, "", getContext());
         recyclerView = view.findViewById(R.id.recyclerView);
-/*
-        favoriteButton = view.findViewById(R.id.favorite);
-        favoriteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(requireContext(), MainActivity.class);
-                startActivity(intent);
-            }
-        });
- */
-
+        doGetRemainingTime();
         return view;
     }
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        doGetRemainingTime(); // 데이터 갱신
+    }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         handler = new Handler();
-        itemList = new ArrayList<String>() ; //초기화 1
-        busAdapter = new BusAdapter(itemList);
+        itemList = new ArrayList<String>(); //초기화 1
+        busRoute = new BusRoute(requireContext());
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
@@ -94,6 +87,14 @@ public class fragment_1 extends Fragment {
             database.close();
         }
 
+    }
+
+    @Override
+    public void onApiResponse(String routeInfo) {
+        if (routeInfo != null) {
+            TextView textView = getView().findViewById(R.id.expandedView);
+            textView.setText(routeInfo);
+        }
     }
 
     private void updateCurrentTime() {
@@ -124,6 +125,7 @@ public class fragment_1 extends Fragment {
                     continue;
                 } else {
                     String time = tokens[1]; // 인덱스 1번의 시간 데이터
+
                     String remainingTime = TimeUtil.calculateRemainingTime(time); // 현재 시간과의 차이 계산
                     String result = tokens[0] + "번\n" + time + " 출발\n" + remainingTime;
 
@@ -151,19 +153,11 @@ public class fragment_1 extends Fragment {
 
             busAdapter.notifyDataSetChanged();
 
-            busAdapter.setOnItemClickListener(new BusAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position) {
-                    String selectedItem = busAdapter.getItemList().get(position);
-                    String[] tokens = selectedItem.split("\n");
-                    String itemToSave = tokens[0] + "\n" + tokens[1]; // tokens[0]와 tokens[1]만 저장하도록 수정
-                    DBHelper dbHelper = new DBHelper(requireContext());
-                    dbHelper.insertFavorite(itemToSave);
-                }
-            });
 
         } catch (IOException e) {
             e.printStackTrace(); // 예외 처리
         }
     }
+
 }
+

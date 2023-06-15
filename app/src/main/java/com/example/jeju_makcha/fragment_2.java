@@ -38,9 +38,11 @@ public class fragment_2 extends Fragment {
     private Handler handler;
     private Runnable runnable;
     private BusAdapter busAdapter;
+    private BusRoute busRoute;
     private ArrayList<String> itemList;
     private DBHelper dbHelper;
     private List<String> favoritesList;
+
 
     @Nullable
     @Override
@@ -49,10 +51,14 @@ public class fragment_2 extends Fragment {
         Log.i(TAG, "페이지2 OnCreateView");
         view = inflater.inflate(R.layout.fragment_frag2, container, false);
         recyclerView = view.findViewById(R.id.frag2_recycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         favoritesList = new ArrayList<>();
-        busAdapter = new BusAdapter(favoritesList);
+        busRoute = new BusRoute(requireContext());
+        busAdapter = new BusAdapter(favoritesList, "", getContext());
+
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(busAdapter);
 
         if (view != null) {

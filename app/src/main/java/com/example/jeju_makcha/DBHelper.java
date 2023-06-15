@@ -13,9 +13,9 @@ import java.util.List;
 public class DBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "favorites.db";
     private static final int DATABASE_VERSION = 1;
-    private static final String TABLE_NAME_FAVORITES = "favorites";
+    public static final String TABLE_NAME_FAVORITES = "favorites";
     private static final String COLUMN_ID_FAVORITES = "id";
-    private static final String COLUMN_ITEM_FAVORITES = "item";
+    public static final String COLUMN_ITEM_FAVORITES = "item";
 
     /////////////////////////////////////////////////////
     //알람 DB
@@ -71,6 +71,7 @@ public class DBHelper extends SQLiteOpenHelper {
         } else {
             Log.i("DBHelper", "Inserted favorite item: " + item);
         }
+
     }
     private boolean isFavoriteItemExists(String item, SQLiteDatabase db) { //확장
         Cursor cursor = db.query(
@@ -115,5 +116,31 @@ public class DBHelper extends SQLiteOpenHelper {
         } else {
             Log.i("DBHelper", "Inserted user setting: " + minutes);
         }
+    }
+
+    public void deleteFavorite(String item) {
+        SQLiteDatabase db = getWritableDatabase();
+        int deletedRows = db.delete(TABLE_NAME_FAVORITES, COLUMN_ITEM_FAVORITES + "=?", new String[]{item});
+        if (deletedRows > 0) {
+            Log.i("DBHelper", "Deleted favorite item: " + item);
+        } else {
+            Log.e("DBHelper", "Failed to delete favorite item");
+        }
+    }
+
+    public boolean isFavorite(String itemToCheck) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // 아이템을 즐겨찾기 테이블에서 조회하여 존재 여부 확인
+        Cursor cursor = db.query(TABLE_NAME_FAVORITES, new String[]{COLUMN_ITEM_FAVORITES}, COLUMN_ITEM_FAVORITES + "=?", new String[]{itemToCheck}, null, null, null);
+        boolean isFavorite = (cursor != null && cursor.getCount() > 0);
+
+        // 리소스 해제
+        if (cursor != null) {
+            cursor.close();
+        }
+        db.close();
+
+        return isFavorite;
     }
 }
