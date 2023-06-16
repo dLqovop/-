@@ -9,7 +9,6 @@
 
 컴퓨터공학 문지현 @[dLqovop](https://github.com/dLqovop)
 컴퓨터공학 윤혁준 @mmoiro
-컴퓨터교육 신지훈 @0kyoroun
 
 ## 프로젝트 소개
 
