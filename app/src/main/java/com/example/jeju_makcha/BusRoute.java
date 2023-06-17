@@ -114,7 +114,7 @@ public class BusRoute {
 
                 } else {
                     // Handle unsuccessful response
-                    Log.e(TAG, "Tldldldldlddldlqkffusdl ro enlwlffkrh Tlqkf wlsWk");
+                    Log.e(TAG, "error");
                 }
             }
 

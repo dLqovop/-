@@ -44,26 +44,5 @@ public class TimeUtil {
         String remainingTime = String.format("%02d시 %02d분 뒤에 출발", remainingHour, remainingMinute);
         return remainingTime;
     }
-
-    // bus.txt 파일을 이용한 시간표 데이터 처리 메서드
-    public static List<String> loadBusTimetable(Context context) {
-        List<String> timetable = new ArrayList<>();
-
-        try {
-            InputStream inputStream = context.getAssets().open("bus.txt");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-
-            String line;
-            while ((line = reader.readLine()) != null) {
-                timetable.add(line);
-            }
-
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return timetable;
-    }
 }
 
