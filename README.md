@@ -45,5 +45,18 @@
 
 ![image](https://github.com/dLqovop/opensourceTeamproject/assets/126761271/05456fa2-b183-43bd-a72c-082de53c19f7)
 - 버스 출발 시간, 버스 출발하기까지 남은시간을 화면에 출력합니다.
-- 버스 출발하기까지 남은 시간을 기준으로 오름차순 정렬하여 시릭
+- 실시간으로 버스 출발하기까지 남은 시간을 계산하고 이를 기준으로 오름차순 정렬하여 화면에 갱신합니다.
+- 선택한 버스의 노선을 확장 view로 출력합니다.
+- 별모양 아이콘을 이용해 희망하는 버스를 즐겨찾기 할 수 있습니다.
 
+![image](https://github.com/dLqovop/opensourceTeamproject/assets/126761271/3c633fe6-1c3a-4244-a885-0ee2705810a7)
+- SQLite를 이용해 사용자가 저장한 버스를 즐겨찾기 페이지 화면에서 출력합니다.
+- 선택한 버스의 노선을 확장 view로 출력합니다.
+
+![image](https://github.com/dLqovop/opensourceTeamproject/assets/126761271/79819265-253a-4caa-b724-d914df26d1ad)
+- 사용자 임의로 알림을 설정할 수 있습니다.
+
+## 6 확장 계획
+- 제주도 전체 버스 노선으로 확장
+
+## 개발하면서 느낀점
