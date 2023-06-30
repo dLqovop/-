@@ -54,7 +54,12 @@
 - SQLite를 이용해 사용자가 저장한 버스를 즐겨찾기 페이지 화면에서 출력합니다.
 - 선택한 버스의 노선을 확장 view로 출력합니다.
 
-![image](https://github.com/dLqovop/opensourceTeamproject/assets/126761271/79819265-253a-4caa-b724-d914df26d1ad)
+#### gif 동작
+![스마트폰 동작](https://github.com/dLqovop/opensourceTeamproject/assets/126761271/5aad7e6a-007e-4949-b9e0-8acbcf05da68)
+- 버스시간 출력 페이지와 즐겨찾기 페이지
+
+![알림 동작](https://github.com/dLqovop/opensourceTeamproject/assets/126761271/dde42292-63d0-4bc2-88be-54e136a06c99)
+
 - 사용자 임의로 알림을 설정할 수 있습니다.
 
 ## 6. 확장 계획
