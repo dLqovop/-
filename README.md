@@ -27,9 +27,10 @@
 ![image](https://github.com/dLqovop/opensourceTeamproject/assets/126761271/f0735254-1184-46f5-abf2-6f71017b3cdf)
 
 ## 4. 역할 분담
-- UI : 윤ㅇㅇ
-- 기능 : 문지현
-- 팀원 : 신ㅇㅇ
+- 팀장 : 윤ㅇㅇ ( UI 디자인 및 구현, splash 화면 구현, 버그 픽스 )
+- 팀원
+    - 문지현 ( 버스 출발 시간, 출발하기까지 남은 시간 실시간 계산 및 정렬, 즐겨찾기 페이지 구현, 버스 노선 API 연동 및 확장 view로 출력, SQLite 즐겨찾기 DB 구현, 사용자 정의 알림기능 구현 )
+    - 신ㅇㅇ
 
 ## 5. UI / BM
 ### 5.1 PROTOTYPE
@@ -56,7 +57,7 @@
 ![image](https://github.com/dLqovop/opensourceTeamproject/assets/126761271/79819265-253a-4caa-b724-d914df26d1ad)
 - 사용자 임의로 알림을 설정할 수 있습니다.
 
-## 6 확장 계획
+## 6. 확장 계획
 - 제주도 전체 버스 노선으로 확장
 - 어플 최적화
 - 노선 번호 검색
